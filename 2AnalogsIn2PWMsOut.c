@@ -170,20 +170,16 @@ int main(void) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ISR(ADC_vect) {
-	OCR0A = ADCH;
-	OCR2B = ADCH;
-	/*
-	if((ADMUX & 0b00001111) == (MUX2)) {					// if ADC is on PC4/ADC4 (pin 27)
-		OCR0A = ADCH;											// assign contents of ADC high register to output compare register 0A, corresponds to pin 12
-		ADMUX = (ADMUX & 0b11110000) | MUX2 | MUX0;				// update ADC to PC5/ADC5 (pin 28)
-	} else if((ADMUX & 0b00001111) == (MUX2 | MUX0)) {		// else if ADC is on PC5/ADC5 (pin 28)
-		OCR2B = ADCH;											// assign contents of ADC high register to output compare register 2B, corresponds to pin 5
-		ADMUX = (ADMUX & 0b11110000) | MUX2;					// update ADC to PC4/ADC4 (pin 27)
+	if((ADMUX & 0b00001111) == (1 << MUX2)) {							// if ADC is on PC4/ADC4 (pin 27)
+		OCR0A = ADCH;														// assign contents of ADC high register to output compare register 0A, corresponds to pin 12
+		ADMUX = (ADMUX & 0b11110000) | (1 << MUX2) | (1 << MUX0);			// update ADC to PC5/ADC5 (pin 28)
+	} else if((ADMUX & 0b00001111) == ((1 << MUX2) | (1 << MUX0))) {	// else if ADC is on PC5/ADC5 (pin 28)
+		OCR2B = ADCH;														// assign contents of ADC high register to output compare register 2B, corresponds to pin 5
+		ADMUX = (ADMUX & 0b11110000) | (1 << MUX2);							// update ADC to PC4/ADC4 (pin 27)
 	} else {
 		// should never get here
 	}
 	ADCSRA |= (1 << ADSC);		// start next ADC
-	*/
 }
 
 
