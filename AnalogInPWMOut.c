@@ -1,10 +1,10 @@
 // AnalogInPWMOut.c
 
-// 10k ohm pot on PC5/ADC5 (pin 28)
+// 10k ohm pot on PC4/ADC4 (pin 27)
 // LED on PD6/OC0A (pin 12), PWMed in response to 10k ohm pot position
 
 #ifndef F_CPU					// if F_CPU was not defined in Project -> Properties
-#define F_CPU 1000000UL			// define it now as 1 GHz unsigned long
+#define F_CPU 1000000UL			// define it now as 1 MHz unsigned long
 #endif
 
 #include <avr/io.h>
@@ -20,7 +20,7 @@ int main(void) {
 	
 	bit          7           6          5         4        3         2          1          0
 	name       REFS1       REFS0      ADLAR       -       MUX3      MUX2       MUX1       MUX0
-	set to       0           1          1         0        0         1          0          1
+	set to       0           1          1         0        0         1          0          0
 	
 	REFS1 = 0    use AVCC for reference voltage
 	REFS0 = 1
@@ -29,12 +29,12 @@ int main(void) {
 	
 	bit 4 = 0
 	
-	MUX3 = 0     use PC5/ADC5 (pin 28) for input
+	MUX3 = 0     use PC4/ADC4 (pin 27) for input
 	MUX2 = 1
 	MUX1 = 0
-	MUX0 = 1
+	MUX0 = 0
 	*/
-	ADMUX = 0b01100101;
+	ADMUX = 0b01100100;
 	
 	/*
 	ADCSRA - ADC Control and Status Register A
@@ -126,7 +126,7 @@ int main(void) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ISR(ADC_vect) {
-	OCR0A = ADCH;				// assign contents of ADC high register to Port D pins
+	OCR0A = ADCH;				// assign contents of ADC high register to output compare register
 }
 
 
